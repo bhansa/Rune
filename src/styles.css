@@ -488,3 +488,188 @@ body.is-resizing .pane { pointer-events: none; }
   color: var(--text);
   font-size: 11px;
 }
+
+/* ---- Companion settings ------------------------------------------------- */
+.sheet__label-dim {
+  font-weight: 400;
+  color: var(--text-dim);
+  text-transform: none;
+  letter-spacing: 0;
+  margin-left: 4px;
+}
+
+.toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  user-select: none;
+}
+.toggle input { position: absolute; opacity: 0; pointer-events: none; }
+.toggle__track {
+  width: 32px;
+  height: 18px;
+  background: var(--bg-inset);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  position: relative;
+  transition: background 0.15s;
+}
+.toggle__thumb {
+  position: absolute;
+  top: 1px;
+  left: 1px;
+  width: 14px;
+  height: 14px;
+  background: var(--text-dim);
+  border-radius: 50%;
+  transition: transform 0.15s, background 0.15s;
+}
+.toggle input:checked ~ .toggle__track {
+  background: color-mix(in srgb, var(--accent) 30%, transparent);
+  border-color: var(--accent);
+}
+.toggle input:checked ~ .toggle__track .toggle__thumb {
+  transform: translateX(14px);
+  background: var(--accent);
+}
+.toggle__text { font-size: 13px; color: var(--text); }
+
+.companion-fields {
+  margin-top: 12px;
+  display: none;
+  flex-direction: column;
+  gap: 12px;
+}
+.companion-fields.is-open { display: flex; }
+
+.field { display: flex; flex-direction: column; gap: 5px; }
+.field__label {
+  font-size: 11px;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  font-weight: 600;
+}
+.field__hint { font-size: 11px; color: var(--text-dim); }
+.field--hint {
+  font-size: 12px;
+  color: var(--text-dim);
+  padding: 8px 10px;
+  background: var(--bg-inset);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  line-height: 1.5;
+}
+.field--hint kbd {
+  font-family: var(--mono);
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  padding: 0 4px;
+  font-size: 11px;
+  color: var(--text);
+  margin: 0 1px;
+}
+
+.input {
+  width: 100%;
+  padding: 6px 10px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--bg-inset);
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: 12px;
+}
+.input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 25%, transparent);
+}
+
+/* Native <select> restyled to match .input, with a custom chevron. */
+.select {
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+  padding-right: 28px;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'><path d='M2.5 4.5L6 8l3.5-3.5' fill='none' stroke='%239aa0a6' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 9px center;
+  background-size: 12px;
+}
+.select option {
+  background: var(--bg-elev);
+  color: var(--text);
+}
+
+.seg--wide { width: 100%; }
+.seg--wide .seg__btn { flex: 1; text-align: center; }
+.seg--wide .seg__btn.is-active {
+  background: var(--bg-elev);
+  color: var(--text);
+}
+
+.model-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 6px;
+}
+
+input[type="range"] {
+  flex: 1;
+  accent-color: var(--accent);
+}
+
+/* Hide provider-specific rows based on current selection */
+body[data-companion-provider="anthropic"] [data-provider-only="ollama"] { display: none !important; }
+body[data-companion-provider="ollama"] [data-provider-only="anthropic"] { display: none !important; }
+
+/* Companion hint bubble (rendered inside Monaco as a content widget) */
+.companion-hint {
+  background: var(--bg-elev);
+  border: 1px solid var(--accent);
+  border-radius: 6px;
+  padding: 6px 10px 6px 26px;
+  font-family: var(--sans);
+  font-size: 12px;
+  color: var(--text);
+  box-shadow: 0 4px 14px rgba(0,0,0,0.35);
+  max-width: 460px;
+  position: relative;
+}
+.companion-hint::before {
+  content: "✦";
+  position: absolute;
+  left: 8px;
+  top: 6px;
+  color: var(--accent);
+  font-size: 13px;
+}
+
+/* Companion status chip in toolbar */
+.companion-badge {
+  display: none;
+  align-items: center;
+  gap: 4px;
+  font-size: 10.5px;
+  color: var(--accent);
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+  font-family: var(--mono);
+}
+.companion-badge.is-on { display: inline-flex; }
+.companion-badge.is-thinking::after {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  animation: pulse 1s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 1; }
+}

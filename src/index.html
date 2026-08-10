@@ -14,6 +14,7 @@
             <span class="brand__mark" aria-hidden="true">✦</span>
             <span class="brand__name">Rune</span>
           </span>
+          <span id="companion-badge" class="companion-badge" title="Companion is on"><span>Companion</span></span>
           <div class="seg" role="tablist" aria-label="Language">
             <button class="seg__btn is-active" data-lang="javascript" role="tab" aria-selected="true">JavaScript</button>
             <button class="seg__btn" data-lang="python" role="tab" aria-selected="false">Python</button>
@@ -118,6 +119,55 @@
           </div>
         </section>
 
+        <section class="sheet__section">
+          <div class="sheet__label">
+            Companion
+            <span class="sheet__label-dim">— nudges you when stuck</span>
+          </div>
+          <label class="toggle">
+            <input type="checkbox" id="companion-enabled" />
+            <span class="toggle__track"><span class="toggle__thumb"></span></span>
+            <span class="toggle__text">Enable Companion mode</span>
+          </label>
+
+          <div class="companion-fields" id="companion-fields">
+            <div class="field">
+              <label class="field__label">Provider</label>
+              <div class="seg seg--wide" role="radiogroup">
+                <button class="seg__btn" data-provider="anthropic" role="radio">Anthropic</button>
+                <button class="seg__btn" data-provider="ollama" role="radio">Ollama (local)</button>
+              </div>
+            </div>
+
+            <div class="field" data-provider-only="anthropic">
+              <label class="field__label" for="companion-key">API key</label>
+              <input type="password" id="companion-key" class="input" placeholder="sk-ant-…" autocomplete="off" />
+              <div class="field__hint">Stored locally on your device.</div>
+            </div>
+
+            <div class="field">
+              <label class="field__label" for="companion-model">Model</label>
+              <div class="model-row">
+                <select id="companion-model" class="input select"></select>
+                <button class="btn btn--ghost" id="companion-refresh" data-provider-only="ollama" title="Refresh Ollama models">↻</button>
+              </div>
+              <div class="field__hint" id="companion-model-hint"></div>
+            </div>
+
+            <div class="field">
+              <label class="field__label" for="companion-idle">Idle delay before suggesting</label>
+              <div class="fontrow">
+                <input type="range" id="companion-idle" min="1500" max="8000" step="500" />
+                <span class="fontrow__value" id="companion-idle-val">4000ms</span>
+              </div>
+            </div>
+
+            <div class="field field--hint">
+              Suggestions appear as gray inline text while you're idle. <kbd>Tab</kbd> to accept, any other key to dismiss. Press <kbd>⌘</kbd><kbd>I</kbd> to force a plain-English hint.
+            </div>
+          </div>
+        </section>
+
         <section class="sheet__section sheet__section--hint">
           <div class="sheet__label">Shortcuts</div>
           <ul class="kbdlist">
@@ -125,6 +175,8 @@
             <li><kbd>⌘</kbd> <kbd>K</kbd> Clear console</li>
             <li><kbd>⌘</kbd> <kbd>+</kbd> / <kbd>−</kbd> / <kbd>0</kbd> Zoom</li>
             <li><kbd>⌘</kbd> <kbd>,</kbd> Open settings</li>
+            <li><kbd>⌘</kbd> <kbd>I</kbd> Ask for a hint</li>
+            <li><kbd>Tab</kbd> Accept suggestion</li>
           </ul>
         </section>
       </div>
