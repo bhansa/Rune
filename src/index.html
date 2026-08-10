@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Rune — a scratchpad that runs code</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body data-theme="dark">
+    <div class="app">
+      <header class="toolbar">
+        <div class="toolbar__left">
+          <span class="brand">
+            <span class="brand__mark" aria-hidden="true">✦</span>
+            <span class="brand__name">Rune</span>
+          </span>
+          <div class="seg" role="tablist" aria-label="Language">
+            <button class="seg__btn is-active" data-lang="javascript" role="tab" aria-selected="true">JavaScript</button>
+            <button class="seg__btn" data-lang="python" role="tab" aria-selected="false">Python</button>
+          </div>
+        </div>
+        <div class="toolbar__right">
+          <button id="settings-btn" class="iconbtn" title="Settings" aria-label="Settings">
+            <svg viewBox="0 0 20 20" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="10" cy="10" r="2.4"/>
+              <path d="M15.6 10a5.6 5.6 0 0 0-.09-.98l1.66-1.29-1.66-2.88-1.94.75a5.7 5.7 0 0 0-1.7-.98L11.6 2.6h-3.2l-.27 2.02a5.7 5.7 0 0 0-1.7.98l-1.94-.75-1.66 2.88 1.66 1.29A5.6 5.6 0 0 0 4.4 10c0 .33.03.66.09.98l-1.66 1.29 1.66 2.88 1.94-.75c.5.41 1.07.74 1.7.98L8.4 17.4h3.2l.27-2.02c.63-.24 1.2-.57 1.7-.98l1.94.75 1.66-2.88-1.66-1.29c.06-.32.09-.65.09-.98z"/>
+            </svg>
+          </button>
+          <button id="reset-btn" class="btn btn--ghost" title="Reset to sample">Reset</button>
+          <button id="clear-btn" class="btn btn--ghost" title="Clear console (⌘K)">Clear</button>
+          <button id="run-btn" class="btn btn--run" title="Run (⌘/Ctrl+Enter)">
+            <span class="btn__play">&#9654;</span> Run
+            <span class="btn__kbd">⌘↵</span>
+          </button>
+        </div>
+      </header>
+
+      <main class="panes">
+        <section class="pane pane--editor" aria-label="Code editor">
+          <div id="editor" class="editor-host"></div>
+        </section>
+
+        <div class="divider" aria-hidden="true" title="Drag to resize · double-click to reset"><span class="divider__grip"></span></div>
+
+        <section class="pane pane--console" aria-label="Console output">
+          <div class="console__header">
+            <span class="console__title">Console</span>
+            <span id="status" class="console__status"></span>
+          </div>
+          <div id="console" class="console" role="log" aria-live="polite">
+            <div class="console__empty" id="console-empty">Press <kbd>⌘↵</kbd> or click <b>Run</b> to execute.</div>
+          </div>
+        </section>
+      </main>
+
+      <footer class="statusbar">
+        <div class="statusbar__left">
+          <span id="cursor-pos" class="sb-item">Ln 1, Col 1</span>
+          <span class="sb-item" id="lang-label">JavaScript</span>
+        </div>
+        <div class="statusbar__right">
+          <span class="sb-item" id="font-label" title="⌘+ / ⌘- / ⌘0">13px</span>
+          <span class="sb-item sb-item--hint">⌘↵ Run · ⌘K Clear · ⌘+/- Zoom · ⌘, Settings</span>
+        </div>
+      </footer>
+    </div>
+
+    <!-- Settings sheet -->
+    <div id="settings-overlay" class="sheet" hidden>
+      <div class="sheet__scrim" data-close></div>
+      <div class="sheet__panel" role="dialog" aria-labelledby="settings-title" aria-modal="true">
+        <header class="sheet__header">
+          <h2 id="settings-title" class="sheet__title">Settings</h2>
+          <button class="iconbtn" data-close aria-label="Close">
+            <svg viewBox="0 0 20 20" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+              <path d="M5 5l10 10M15 5L5 15"/>
+            </svg>
+          </button>
+        </header>
+
+        <section class="sheet__section">
+          <div class="sheet__label">Theme</div>
+          <div class="themegrid" role="radiogroup" aria-label="Theme">
+            <label class="themecard" data-theme-value="dark">
+              <input type="radio" name="theme" value="dark" />
+              <div class="themecard__swatch themecard__swatch--dark">
+                <span></span><span></span><span></span>
+              </div>
+              <div class="themecard__name">Dark</div>
+              <div class="themecard__desc">Classic Monaco</div>
+            </label>
+            <label class="themecard" data-theme-value="matte">
+              <input type="radio" name="theme" value="matte" />
+              <div class="themecard__swatch themecard__swatch--matte">
+                <span></span><span></span><span></span>
+              </div>
+              <div class="themecard__name">Matte</div>
+              <div class="themecard__desc">Flat, deep gray</div>
+            </label>
+            <label class="themecard" data-theme-value="light">
+              <input type="radio" name="theme" value="light" />
+              <div class="themecard__swatch themecard__swatch--light">
+                <span></span><span></span><span></span>
+              </div>
+              <div class="themecard__name">Light</div>
+              <div class="themecard__desc">Bright &amp; clean</div>
+            </label>
+          </div>
+        </section>
+
+        <section class="sheet__section">
+          <div class="sheet__label">Font size</div>
+          <div class="fontrow">
+            <button class="btn btn--ghost" id="font-dec">−</button>
+            <div class="fontrow__value" id="font-value">13px</div>
+            <button class="btn btn--ghost" id="font-inc">+</button>
+            <button class="btn btn--ghost" id="font-reset">Reset</button>
+          </div>
+        </section>
+
+        <section class="sheet__section sheet__section--hint">
+          <div class="sheet__label">Shortcuts</div>
+          <ul class="kbdlist">
+            <li><kbd>⌘</kbd> <kbd>↵</kbd> Run</li>
+            <li><kbd>⌘</kbd> <kbd>K</kbd> Clear console</li>
+            <li><kbd>⌘</kbd> <kbd>+</kbd> / <kbd>−</kbd> / <kbd>0</kbd> Zoom</li>
+            <li><kbd>⌘</kbd> <kbd>,</kbd> Open settings</li>
+          </ul>
+        </section>
+      </div>
+    </div>
+
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>
