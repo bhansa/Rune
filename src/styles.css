@@ -320,6 +320,156 @@ body.is-resizing .pane { pointer-events: none; }
   border: 2px solid var(--bg-inset);
 }
 
+/* ---- Problems dialog ---------------------------------------------------- */
+.sheet__panel--wide { width: min(780px, calc(100vw - 40px)); }
+
+.problems__controls {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 10px;
+  padding: 0 14px 12px;
+  align-items: center;
+}
+.problems__chips { display: flex; gap: 4px; }
+.problems__chip {
+  appearance: none;
+  border: 1px solid var(--border);
+  background: var(--bg-inset);
+  color: var(--text-dim);
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  cursor: pointer;
+  font-family: inherit;
+}
+.problems__chip.is-active {
+  background: var(--accent);
+  color: var(--accent-fg);
+  border-color: transparent;
+}
+
+.problems__list {
+  max-height: 60vh;
+  overflow-y: auto;
+  padding: 0 6px 6px;
+  border-top: 1px solid var(--border);
+}
+.problem-row {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  width: 100%;
+  display: grid;
+  grid-template-columns: 60px 1fr 70px 1fr;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  text-align: left;
+  font-family: inherit;
+  cursor: pointer;
+  border-radius: 6px;
+}
+.problem-row:hover { background: var(--bg-inset); }
+.problem-row__id {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text-dim);
+}
+.problem-row__name { font-size: 13px; font-weight: 500; }
+.problem-row__diff {
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  text-align: center;
+  justify-self: start;
+}
+.problem-row[data-difficulty="easy"]   .problem-row__diff { color: var(--ok);    background: color-mix(in srgb, var(--ok) 14%, transparent); }
+.problem-row[data-difficulty="medium"] .problem-row__diff { color: var(--warn);  background: color-mix(in srgb, var(--warn) 14%, transparent); }
+.problem-row[data-difficulty="hard"]   .problem-row__diff { color: var(--error); background: color-mix(in srgb, var(--error) 14%, transparent); }
+.problem-row__topics {
+  font-size: 11px;
+  color: var(--text-dim);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.problems__empty {
+  padding: 30px 14px;
+  color: var(--text-dim);
+  font-size: 12.5px;
+  text-align: center;
+}
+.problems__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  border-top: 1px solid var(--border);
+  gap: 10px;
+}
+.problems__status {
+  font-size: 11.5px;
+  color: var(--text-dim);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Room button in the toolbar — shows a dim dot when disconnected, an accent
+   dot when live. Room ID or peer count appears in place of the "Room" word
+   once connected. */
+.room-btn__dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--text-dim);
+  box-shadow: 0 0 0 2px transparent;
+  transition: background 0.15s, box-shadow 0.15s;
+}
+#room-btn.is-live .room-btn__dot {
+  background: var(--ok);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--ok) 25%, transparent);
+  animation: roomPulse 2.2s ease-in-out infinite;
+}
+@keyframes roomPulse {
+  0%, 100% { box-shadow: 0 0 0 3px color-mix(in srgb, var(--ok) 25%, transparent); }
+  50%      { box-shadow: 0 0 0 5px color-mix(in srgb, var(--ok) 12%, transparent); }
+}
+
+/* ---- Multiplayer participants panel ------------------------------------- */
+.mp-participants {
+  display: none;
+  padding: 6px 12px;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-elev);
+  font-family: var(--sans);
+  font-size: 11.5px;
+}
+.mp-participants.has-peers { display: block; }
+.mp-row {
+  display: grid;
+  grid-template-columns: 10px 1fr 100px auto;
+  align-items: center;
+  gap: 8px;
+  padding: 3px 0;
+  color: var(--text);
+}
+.mp-row--self .mp-name { font-weight: 600; }
+.mp-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+.mp-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.mp-bar {
+  height: 6px;
+  background: var(--bg-inset);
+  border-radius: 3px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+.mp-bar__fill { height: 100%; transition: width 0.3s ease-out; background: var(--accent); }
+.mp-meta { font-family: var(--mono); font-size: 10.5px; color: var(--text-dim); white-space: nowrap; }
+
 /* ---- Status bar ---------------------------------------------------------- */
 .statusbar {
   display: flex;
@@ -622,30 +772,368 @@ input[type="range"] {
   accent-color: var(--accent);
 }
 
-/* Hide provider-specific rows based on current selection */
-body[data-companion-provider="anthropic"] [data-provider-only="ollama"] { display: none !important; }
-body[data-companion-provider="ollama"] [data-provider-only="anthropic"] { display: none !important; }
+/* Provider-specific rows: hide by default, reveal when the body's
+   data-companion-provider matches the element's data-provider-only. */
+[data-provider-only] { display: none !important; }
+body[data-companion-provider="anthropic"] [data-provider-only="anthropic"],
+body[data-companion-provider="claude-cli"] [data-provider-only="claude-cli"],
+body[data-companion-provider="ollama"] [data-provider-only="ollama"] {
+  display: revert !important;
+}
 
 /* Companion hint bubble (rendered inside Monaco as a content widget) */
 .companion-hint {
-  background: var(--bg-elev);
-  border: 1px solid var(--accent);
-  border-radius: 6px;
-  padding: 6px 10px 6px 26px;
-  font-family: var(--sans);
-  font-size: 12px;
-  color: var(--text);
-  box-shadow: 0 4px 14px rgba(0,0,0,0.35);
-  max-width: 460px;
   position: relative;
+  background: linear-gradient(180deg,
+    color-mix(in srgb, var(--bg-elev) 95%, var(--accent)),
+    var(--bg-elev));
+  border: 1px solid color-mix(in srgb, var(--accent) 55%, var(--border));
+  border-radius: 10px;
+  padding: 10px 14px 10px 34px;
+  font-family: var(--sans);
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--text);
+  box-shadow:
+    0 12px 40px rgba(0,0,0,0.45),
+    0 0 0 4px color-mix(in srgb, var(--accent) 8%, transparent);
+  max-width: 480px;
+  animation: hintIn 200ms cubic-bezier(0.2, 0.9, 0.3, 1.2);
 }
 .companion-hint::before {
   content: "✦";
   position: absolute;
-  left: 8px;
-  top: 6px;
+  left: 12px;
+  top: 9px;
   color: var(--accent);
-  font-size: 13px;
+  font-size: 15px;
+  text-shadow: 0 0 12px color-mix(in srgb, var(--accent) 60%, transparent);
+  animation: hintSparkle 2.4s ease-in-out infinite;
+}
+@keyframes hintIn {
+  from { opacity: 0; transform: translateY(6px) scale(0.96); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes hintSparkle {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.55; }
+}
+
+/* Companion "thinking" widget — rotating quote while the model churns.
+   Positioned as a Monaco overlay in the bottom-right corner of the editor
+   pane so it never blocks the code being read. */
+.companion-thinking {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px 6px 10px;
+  margin: 0 12px 12px 0; /* keeps it off the pane edge */
+  background: color-mix(in srgb, var(--bg-elev) 92%, var(--accent));
+  border: 1px solid color-mix(in srgb, var(--accent) 40%, var(--border));
+  border-radius: 999px;
+  font-family: var(--sans);
+  font-size: 11.5px;
+  color: var(--text-dim);
+  box-shadow:
+    0 10px 30px rgba(0,0,0,0.4),
+    0 0 0 3px color-mix(in srgb, var(--accent) 8%, transparent),
+    inset 0 1px 0 rgba(255,255,255,0.04);
+  max-width: 380px;
+  min-width: 200px;
+  animation: thinkingIn 220ms cubic-bezier(0.2, 0.9, 0.3, 1.2);
+  backdrop-filter: blur(6px);
+  pointer-events: none; /* click-through so it never blocks the editor below */
+}
+/* Subtle glow around the whole pill */
+.companion-thinking::after {
+  content: "";
+  position: absolute;
+  inset: -6px;
+  border-radius: 999px;
+  background: radial-gradient(60% 100% at 50% 50%,
+    color-mix(in srgb, var(--accent) 22%, transparent),
+    transparent);
+  filter: blur(8px);
+  z-index: -1;
+  pointer-events: none;
+  animation: thinkingGlow 3s ease-in-out infinite;
+}
+@keyframes thinkingIn {
+  from { opacity: 0; transform: translateY(4px) scale(0.96); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes thinkingGlow {
+  0%, 100% { opacity: 0.6; }
+  50%      { opacity: 1; }
+}
+.companion-thinking__spinner {
+  position: relative;
+  width: 11px;
+  height: 11px;
+  flex-shrink: 0;
+}
+.companion-thinking__spinner::before,
+.companion-thinking__spinner::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 1.5px solid transparent;
+}
+.companion-thinking__spinner::before {
+  border-top-color: var(--accent);
+  border-right-color: color-mix(in srgb, var(--accent) 60%, transparent);
+  animation: thinkingSpin 0.9s cubic-bezier(0.6, 0.2, 0.4, 0.8) infinite;
+}
+.companion-thinking__spinner::after {
+  inset: 3px;
+  border-bottom-color: color-mix(in srgb, var(--accent) 40%, transparent);
+  animation: thinkingSpin 1.2s linear infinite reverse;
+}
+@keyframes thinkingSpin {
+  to { transform: rotate(360deg); }
+}
+.companion-thinking__label {
+  color: var(--text);
+  font-weight: 600;
+  white-space: nowrap;
+  letter-spacing: 0.1px;
+}
+.companion-thinking__label::after {
+  content: "";
+  display: inline-block;
+  width: 14px;
+  text-align: left;
+  animation: thinkingDots 1.4s steps(4, jump-none) infinite;
+}
+@keyframes thinkingDots {
+  0%   { content: ""; }
+  25%  { content: "."; }
+  50%  { content: ".."; }
+  75%  { content: "..."; }
+  100% { content: ""; }
+}
+.companion-thinking__quote {
+  color: var(--text-dim);
+  font-style: italic;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+  flex: 1;
+  opacity: 0.85;
+  animation: quoteFade 3s ease-in-out infinite;
+}
+@keyframes quoteFade {
+  0%, 100% { opacity: 0.6; }
+  15%, 85% { opacity: 0.95; }
+}
+/* Separator dot between label and quote */
+.companion-thinking__quote::before {
+  content: "·";
+  margin-right: 8px;
+  color: color-mix(in srgb, var(--accent) 70%, var(--text-dim));
+  font-weight: 700;
+  opacity: 0.8;
+}
+
+/* ---- Companion pets ------------------------------------------------------ */
+.pet {
+  color: color-mix(in srgb, var(--accent) 65%, var(--text-dim));
+  pointer-events: none;
+  user-select: none;
+}
+.pet[hidden] { display: none; }
+
+/* Standing tabby cat — wanders back and forth along the bottom of the editor.
+   Two-layer trick: outer element handles walking + facing direction (scaleX
+   flip); inner element handles breathing (scale). Keeps the two transforms
+   from fighting each other. */
+/* JS drives x-position via `left` transitions and direction via `--facing`.
+   Step-bob only runs while the cat is actively walking, controlled by
+   toggling .is-walking on the outer element. */
+.pet--cat {
+  position: absolute;
+  bottom: 14px;
+  left: 14px;
+  z-index: 3;
+  width: 130px;
+  height: 104px;
+  transform: scaleX(var(--facing, 1));
+}
+.pane--editor { position: relative; }  /* anchor for the cat */
+
+.pet-cat__body {
+  filter: drop-shadow(0 3px 8px rgba(0,0,0,0.28));
+  animation: catBreathe 3.8s ease-in-out infinite;
+  transform-origin: 50% 100%;
+}
+@keyframes catBreathe {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.015, 0.99); }
+}
+
+/* Step-bob is only present while the cat is actively walking. */
+.pet--cat.is-walking .pet-cat__step {
+  animation: catStep 0.5s ease-in-out infinite;
+}
+@keyframes catStep {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-3px); }
+}
+
+/* Leg swing — each leg pivots at the hip (top of the leg) so the foot arcs
+   forward and backward, then lifts and swings back through the air. This is
+   the standard 2-beat trot pattern from CSS walk-cycle demos: diagonal pairs
+   are in-phase, opposing pairs offset by half a cycle. */
+.pet--cat.is-walking .pet-cat__leg {
+  transform-box: fill-box;
+  transform-origin: 50% 0%;   /* pivot at hip, not at foot */
+  animation: catLegSwing 0.55s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+}
+.pet--cat.is-walking .pet-cat__leg--back-left,
+.pet--cat.is-walking .pet-cat__leg--front-right {
+  animation-delay: 0s;
+}
+.pet--cat.is-walking .pet-cat__leg--back-right,
+.pet--cat.is-walking .pet-cat__leg--front-left {
+  animation-delay: -0.275s;  /* half cycle */
+}
+@keyframes catLegSwing {
+  /* stance phase: foot planted, hip pushes back — leg rotates from front to back */
+   0% { transform: rotate(-18deg) translateY(0); }
+  40% { transform: rotate(18deg)  translateY(0); }
+  /* swing phase: lift, arc forward through the air, plant */
+  55% { transform: rotate(15deg)  translateY(-4px); }
+  85% { transform: rotate(-15deg) translateY(-4px); }
+ 100% { transform: rotate(-18deg) translateY(0); }
+}
+
+/* Ease-out the body bob so it visually resolves at the same beat as feet
+   landing — subtle sync, gives the walk its "grounded" feel. */
+.pet--cat.is-walking .pet-cat__step {
+  animation-duration: 0.275s;  /* one beat = half a full leg cycle */
+}
+
+/* Blink: eyes squash flat for a fraction of a second every few seconds. */
+.pet-cat__eyes {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: catBlink 4.6s ease-in-out infinite;
+}
+@keyframes catBlink {
+  0%, 92%, 100% { transform: scaleY(1); }
+  95%           { transform: scaleY(0.08); }
+  98%           { transform: scaleY(1); }
+}
+
+/* Tail sway: rotate the tail group around where it joins the body. */
+.pet-cat__tail {
+  transform-box: fill-box;
+  transform-origin: 100% 100%;
+  animation: catTail 3.2s ease-in-out infinite;
+}
+@keyframes catTail {
+  0%, 100% { transform: rotate(-6deg); }
+  50%      { transform: rotate(4deg);  }
+}
+
+/* Koala — clings to the divider (which acts as its tree trunk) and sleeps
+   in one spot. Just a slow breathing animation, no climbing. */
+.divider { overflow: visible; } /* allow the koala to spill past the 5px width */
+.pet--koala {
+  position: absolute;
+  left: 50%;
+  top: 40%;
+  z-index: 4;
+  filter: drop-shadow(0 3px 8px rgba(0,0,0,0.32));
+  animation: koalaBreathe 5s ease-in-out infinite;
+  transform: translateX(-50%);
+}
+.pet--koala img {
+  display: block;
+  width: 150px;
+  height: auto;
+  transform: rotate(90deg);   /* head points up so it clings vertically */
+  transform-origin: center;
+  user-select: none;
+  -webkit-user-drag: none;
+  pointer-events: none;
+}
+/* Long plateaus of stillness, occasional slow shuffle. 180s per cycle
+   = ~3 min of very lazy motion, ~60% of it doing nothing. */
+@keyframes koalaClimb {
+  0%,  18% { top: 75%; }   /* nap at the bottom */
+  25%, 43% { top: 55%; }   /* small shuffle up, then a long rest */
+  52%, 72% { top: 25%; }   /* slow climb, then longest rest at the top */
+  82%, 96% { top: 60%; }   /* drift down, another rest */
+  100%     { top: 75%; }   /* back home */
+}
+/* Very slow breath rather than a wiggle — koalas don't jitter. */
+@keyframes koalaBreathe {
+  0%, 100% { transform: translateX(-50%) scale(1); }
+  50%      { transform: translateX(-50%) scale(1.02, 0.99); }
+}
+/* Freeze it while the user is actively dragging the divider */
+.divider.is-dragging .pet--koala { animation-play-state: paused; }
+
+/* ---- Monaco inline-suggestion overrides ---------------------------------
+   Style the ghost text and the "+" preview chip so they match the app theme
+   and don't look like they wandered in from a different editor. */
+.monaco-editor .ghost-text,
+.monaco-editor .ghost-text-decoration,
+.monaco-editor .ghost-text-decoration-preview,
+.monaco-editor .suggest-preview-text .ghost-text-decoration {
+  color: color-mix(in srgb, var(--accent) 60%, var(--text-dim)) !important;
+  font-style: italic;
+  opacity: 0.85;
+}
+body[data-theme="light"] .monaco-editor .ghost-text,
+body[data-theme="light"] .monaco-editor .ghost-text-decoration,
+body[data-theme="light"] .monaco-editor .ghost-text-decoration-preview {
+  color: color-mix(in srgb, var(--accent) 45%, var(--text-dim)) !important;
+  opacity: 0.7;
+}
+/* The multi-line "+" preview chip Monaco shows when the suggestion is
+   below/beside the cursor rather than inline. */
+.monaco-editor .suggest-preview-additional-widget,
+.monaco-editor .inline-completions-hover,
+.monaco-editor .inlineSuggestionsHints {
+  background: linear-gradient(180deg,
+    color-mix(in srgb, var(--bg-elev) 95%, var(--accent)),
+    var(--bg-elev)) !important;
+  border: 1px solid color-mix(in srgb, var(--accent) 40%, var(--border)) !important;
+  border-radius: 8px !important;
+  box-shadow:
+    0 10px 32px rgba(0,0,0,0.4),
+    0 0 0 3px color-mix(in srgb, var(--accent) 8%, transparent) !important;
+  padding: 6px 10px !important;
+  font-family: var(--mono) !important;
+  color: var(--text) !important;
+}
+/* Small "+" or arrow indicator on the preview chip */
+.monaco-editor .inlineSuggestionsHints a,
+.monaco-editor .suggest-preview-additional-widget .action-label {
+  color: var(--accent) !important;
+  opacity: 0.9;
+}
+
+/* The persistent inline-suggestion toolbar (accept/reject/next) that shows
+   when inlineSuggest.showToolbar is "always". */
+.monaco-editor .inline-completions-widget,
+.monaco-editor .inlineSuggestionStatusBarItemLabel,
+.monaco-editor .inlineSuggestionsHints {
+  padding: 4px 8px !important;
+  gap: 4px !important;
+}
+.monaco-editor .inlineSuggestionsHints .action-item {
+  color: var(--text-dim) !important;
+}
+.monaco-editor .inlineSuggestionsHints .action-item:hover {
+  color: var(--accent) !important;
+  background: color-mix(in srgb, var(--accent) 12%, transparent) !important;
+  border-radius: 4px;
 }
 
 /* Companion status chip in toolbar */

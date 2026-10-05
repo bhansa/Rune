@@ -1,8 +1,8 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "desktop_aps",
+  "productName": "Rune",
   "version": "0.1.0",
-  "identifier": "com.desktopaps.runner",
+  "identifier": "app.rune.scratchpad",
   "build": {
     "beforeDevCommand": "npm run dev",
     "devUrl": "http://localhost:1420",
@@ -27,6 +27,7 @@
   "bundle": {
     "active": true,
     "targets": "all",
+    "createUpdaterArtifacts": true,
     "icon": [
       "icons/32x32.png",
       "icons/128x128.png",
@@ -34,5 +35,14 @@
       "icons/icon.icns",
       "icons/icon.ico"
     ]
+  },
+  "plugins": {
+    "updater": {
+      "active": true,
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IEZEOUJGN0IxNkU3NkVDMTEKUldRUjdIWnVzZmViL2ZQbjlhZGJub0J4ZVNmVGY2UE9qOXRpTkNXcnBIeEk5dHF0dVorUFpKcGYK",
+      "endpoints": [
+        "https://github.com/bhansa/rune/releases/latest/download/latest.json"
+      ]
+    }
   }
 }

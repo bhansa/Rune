@@ -21,6 +21,14 @@
           </div>
         </div>
         <div class="toolbar__right">
+          <button id="problems-btn" class="btn btn--ghost" title="Browse problems" hidden>
+            <span aria-hidden="true">📚</span>
+            <span>Problems</span>
+          </button>
+          <button id="room-btn" class="btn btn--ghost" title="Multiplayer room" aria-label="Multiplayer room">
+            <span id="room-btn__dot" class="room-btn__dot" aria-hidden="true"></span>
+            <span id="room-btn__label">Room</span>
+          </button>
           <button id="settings-btn" class="iconbtn" title="Settings" aria-label="Settings">
             <svg viewBox="0 0 20 20" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
               <circle cx="10" cy="10" r="2.4"/>
@@ -39,15 +47,98 @@
       <main class="panes">
         <section class="pane pane--editor" aria-label="Code editor">
           <div id="editor" class="editor-host"></div>
+          <div id="pet-cat" class="pet pet--cat" hidden aria-hidden="true">
+           <div class="pet-cat__step">
+            <div class="pet-cat__body">
+             <svg viewBox="0 0 100 80" width="130" height="104" xmlns="http://www.w3.org/2000/svg">
+              <!-- Tail: swooping curve pointing up -->
+              <g class="pet-cat__tail">
+                <path d="M 26 42 Q 12 30 16 14 Q 18 6 25 10"
+                      stroke="#e89a3b" stroke-width="7" fill="none" stroke-linecap="round"/>
+                <path d="M 22 22 Q 20 20 22 17" stroke="#b26a1e" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+                <path d="M 20 30 Q 18 28 20 25" stroke="#b26a1e" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+              </g>
+
+              <!-- Body: rounded oval -->
+              <ellipse cx="52" cy="50" rx="27" ry="15" fill="#e89a3b"/>
+              <!-- Body stripes -->
+              <path d="M 42 42 Q 40 50 42 58" stroke="#b26a1e" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+              <path d="M 50 40 Q 48 50 50 60" stroke="#b26a1e" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+              <path d="M 58 40 Q 56 50 58 60" stroke="#b26a1e" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+
+              <!-- Legs: 4 stubby cylinders that clearly protrude below the
+                   body. Each in its own group so it can trot independently. -->
+              <g class="pet-cat__leg pet-cat__leg--back-left">
+                <rect x="34" y="60" width="7" height="15" rx="3.3" fill="#e89a3b"/>
+                <ellipse cx="37.5" cy="74" rx="3.8" ry="2.4" fill="#b26a1e"/>
+              </g>
+              <g class="pet-cat__leg pet-cat__leg--back-right">
+                <rect x="45" y="62" width="7" height="14" rx="3.3" fill="#c47828"/>
+                <ellipse cx="48.5" cy="75" rx="3.8" ry="2.4" fill="#8f5514"/>
+              </g>
+              <g class="pet-cat__leg pet-cat__leg--front-left">
+                <rect x="59" y="62" width="7" height="14" rx="3.3" fill="#c47828"/>
+                <ellipse cx="62.5" cy="75" rx="3.8" ry="2.4" fill="#8f5514"/>
+              </g>
+              <g class="pet-cat__leg pet-cat__leg--front-right">
+                <rect x="70" y="60" width="7" height="15" rx="3.3" fill="#e89a3b"/>
+                <ellipse cx="73.5" cy="74" rx="3.8" ry="2.4" fill="#b26a1e"/>
+              </g>
+
+              <!-- Head -->
+              <circle cx="74" cy="28" r="16" fill="#e89a3b"/>
+
+              <!-- Ears -->
+              <path d="M 62 20 L 60 8 L 71 16 Z" fill="#e89a3b"/>
+              <path d="M 86 20 L 88 8 L 77 16 Z" fill="#e89a3b"/>
+              <path d="M 63 18 L 62 12 L 68 16 Z" fill="#c47828"/>
+              <path d="M 85 18 L 86 12 L 80 16 Z" fill="#c47828"/>
+
+              <!-- Face patch (lighter around mouth) -->
+              <ellipse cx="74" cy="33" rx="8" ry="6" fill="#f7d9a8"/>
+
+              <!-- Eyes -->
+              <g class="pet-cat__eyes">
+                <circle cx="67" cy="26" r="3" fill="#1a1a1a"/>
+                <circle cx="81" cy="26" r="3" fill="#1a1a1a"/>
+                <circle cx="67.8" cy="25.2" r="0.85" fill="#ffffff"/>
+                <circle cx="81.8" cy="25.2" r="0.85" fill="#ffffff"/>
+              </g>
+
+              <!-- Nose + mouth -->
+              <path d="M 73 32 L 75 32 L 74 33.5 Z" fill="#8a4a2a"/>
+              <path d="M 74 33.5 Q 71 36 69 34" stroke="#8a4a2a" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+              <path d="M 74 33.5 Q 77 36 79 34" stroke="#8a4a2a" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+
+              <!-- Whiskers -->
+              <line x1="64" y1="32" x2="55" y2="30"  stroke="#1a1a1a" stroke-width="0.7" stroke-linecap="round"/>
+              <line x1="64" y1="34" x2="55" y2="34"  stroke="#1a1a1a" stroke-width="0.7" stroke-linecap="round"/>
+              <line x1="84" y1="32" x2="93" y2="30"  stroke="#1a1a1a" stroke-width="0.7" stroke-linecap="round"/>
+              <line x1="84" y1="34" x2="93" y2="34"  stroke="#1a1a1a" stroke-width="0.7" stroke-linecap="round"/>
+
+              <!-- Collar + bell -->
+              <path d="M 60 42 Q 74 50 88 42" stroke="#c93635" stroke-width="3.6" fill="none" stroke-linecap="round"/>
+              <circle cx="74" cy="47" r="3.2" fill="#f0c236"/>
+              <circle cx="74" cy="47" r="0.7" fill="#8f6800"/>
+             </svg>
+            </div>
+           </div>
+          </div>
         </section>
 
-        <div class="divider" aria-hidden="true" title="Drag to resize · double-click to reset"><span class="divider__grip"></span></div>
+        <div class="divider" aria-hidden="true" title="Drag to resize · double-click to reset">
+          <span class="divider__grip"></span>
+          <div id="pet-koala" class="pet pet--koala" hidden aria-hidden="true">
+            <img src="./assets/koala.png" alt="" draggable="false" />
+          </div>
+        </div>
 
         <section class="pane pane--console" aria-label="Console output">
           <div class="console__header">
             <span class="console__title">Console</span>
             <span id="status" class="console__status"></span>
           </div>
+          <div id="mp-participants" class="mp-participants" aria-hidden="true"></div>
           <div id="console" class="console" role="log" aria-live="polite">
             <div class="console__empty" id="console-empty">Press <kbd>⌘↵</kbd> or click <b>Run</b> to execute.</div>
           </div>
@@ -132,9 +223,19 @@
 
           <div class="companion-fields" id="companion-fields">
             <div class="field">
+              <label class="field__label">Suggest</label>
+              <div class="seg seg--wide" role="radiogroup">
+                <button class="seg__btn" data-style="guidance" role="radio">Ideas · guide me</button>
+                <button class="seg__btn" data-style="code" role="radio">Code · autocomplete</button>
+              </div>
+              <div class="field__hint" id="style-hint"></div>
+            </div>
+
+            <div class="field">
               <label class="field__label">Provider</label>
               <div class="seg seg--wide" role="radiogroup">
-                <button class="seg__btn" data-provider="anthropic" role="radio">Anthropic</button>
+                <button class="seg__btn" data-provider="anthropic" role="radio">Anthropic API</button>
+                <button class="seg__btn" data-provider="claude-cli" role="radio">Claude Code</button>
                 <button class="seg__btn" data-provider="ollama" role="radio">Ollama (local)</button>
               </div>
             </div>
@@ -168,6 +269,25 @@
           </div>
         </section>
 
+        <section class="sheet__section">
+          <div class="sheet__label">Problems browser <span class="sheet__label-dim">— optional LeetCode catalogue</span></div>
+          <label class="toggle">
+            <input type="checkbox" id="problems-enabled" />
+            <span class="toggle__track"><span class="toggle__thumb"></span></span>
+            <span class="toggle__text">Show Problems button in the toolbar</span>
+          </label>
+        </section>
+
+        <section class="sheet__section">
+          <div class="sheet__label">Companion pet <span class="sheet__label-dim">— because why not</span></div>
+          <div class="seg seg--wide" role="radiogroup" aria-label="Pet">
+            <button class="seg__btn" data-pet="none" role="radio">None</button>
+            <button class="seg__btn" data-pet="cat" role="radio">🐱 Cat</button>
+            <button class="seg__btn" data-pet="koala" role="radio">🐨 Koala</button>
+          </div>
+          <div class="field__hint">Cat naps in the editor corner. Koala climbs the divider.</div>
+        </section>
+
         <section class="sheet__section sheet__section--hint">
           <div class="sheet__label">Shortcuts</div>
           <ul class="kbdlist">
@@ -178,6 +298,91 @@
             <li><kbd>⌘</kbd> <kbd>I</kbd> Ask for a hint</li>
             <li><kbd>Tab</kbd> Accept suggestion</li>
           </ul>
+        </section>
+      </div>
+    </div>
+
+    <!-- Problems browser — LeetCode-style dialog, standalone. -->
+    <div id="problems-overlay" class="sheet" hidden>
+      <div class="sheet__scrim" data-close-problems></div>
+      <div class="sheet__panel sheet__panel--wide" role="dialog" aria-labelledby="problems-title" aria-modal="true">
+        <header class="sheet__header">
+          <h2 id="problems-title" class="sheet__title">Problems</h2>
+          <button class="iconbtn" data-close-problems aria-label="Close">
+            <svg viewBox="0 0 20 20" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+              <path d="M5 5l10 10M15 5L5 15"/>
+            </svg>
+          </button>
+        </header>
+
+        <div class="problems__controls">
+          <input id="problems-search" class="input" type="text" placeholder="Search problems or topics…" autocomplete="off"/>
+          <div class="problems__chips" role="tablist">
+            <button class="problems__chip" data-diff="All"    role="tab">All</button>
+            <button class="problems__chip" data-diff="Easy"   role="tab">Easy</button>
+            <button class="problems__chip" data-diff="Medium" role="tab">Medium</button>
+            <button class="problems__chip" data-diff="Hard"   role="tab">Hard</button>
+          </div>
+        </div>
+
+        <div id="problems-list" class="problems__list"></div>
+
+        <footer class="problems__footer">
+          <span id="problems-status" class="problems__status">Click a problem to load its description and code stub into the editor.</span>
+          <button id="problems-clear-cache" class="btn btn--ghost" title="Delete cached problem JSONs">Clear cache</button>
+        </footer>
+      </div>
+    </div>
+
+    <!-- Room / multiplayer dialog — kept separate from Settings so join+invite is one click away. -->
+    <div id="room-overlay" class="sheet" hidden>
+      <div class="sheet__scrim" data-close-room></div>
+      <div class="sheet__panel" role="dialog" aria-labelledby="room-title" aria-modal="true">
+        <header class="sheet__header">
+          <h2 id="room-title" class="sheet__title">Room</h2>
+          <button class="iconbtn" data-close-room aria-label="Close">
+            <svg viewBox="0 0 20 20" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+              <path d="M5 5l10 10M15 5L5 15"/>
+            </svg>
+          </button>
+        </header>
+
+        <section class="sheet__section">
+          <div class="sheet__label">
+            Multiplayer
+            <span class="sheet__label-dim">— TypeRacer-style progress</span>
+          </div>
+          <label class="toggle">
+            <input type="checkbox" id="mp-enabled" />
+            <span class="toggle__track"><span class="toggle__thumb"></span></span>
+            <span class="toggle__text">Join a room</span>
+          </label>
+          <div class="companion-fields" id="mp-fields">
+            <div class="field">
+              <label class="field__label" for="mp-name">Display name</label>
+              <input type="text" id="mp-name" class="input" placeholder="your name" maxlength="32" autocomplete="off"/>
+            </div>
+            <div class="field">
+              <label class="field__label" for="mp-host">Relay host</label>
+              <input type="text" id="mp-host" class="input" placeholder="rune-relay.YOUR-SLUG.partykit.dev" autocomplete="off"/>
+              <div class="field__hint">Deploy the relay with <code>npx partykit deploy</code> — see <code>party/rune-relay.ts</code>.</div>
+            </div>
+            <div class="field">
+              <label class="field__label" for="mp-room">Room ID</label>
+              <div class="model-row">
+                <input type="text" id="mp-room" class="input" placeholder="pick a shared name (e.g. two-sum-01)" autocomplete="off"/>
+                <button class="btn btn--ghost" id="mp-copy" title="Copy invite link">⧉ Copy</button>
+              </div>
+              <div class="field__hint" id="mp-status">Anyone with the same room ID and host will see your progress live.</div>
+            </div>
+          </div>
+        </section>
+
+        <section class="sheet__section sheet__section--hint">
+          <div class="sheet__label">How it works</div>
+          <p style="margin:0;line-height:1.5;color:var(--text-dim);font-size:12px;">
+            Rune sends a small progress heartbeat every second — your character count, cursor line, and a color. No code is shared. Peers appear above the console with a live progress bar.
+          </p>
         </section>
       </div>
     </div>
